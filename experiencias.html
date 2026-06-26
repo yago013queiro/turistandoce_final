@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experiências — Turistando CE</title>
+  <meta name="description"
+    content="Descubra experiências no Ceará com filtros por cidade, categoria, preço, duração, avaliação e acessibilidade.">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+  <aside class="acessibilidade-bar hidden" aria-label="Acessibilidade" aria-hidden="true">
+    <button onclick="alterarFonte(1)" title="Aumentar fonte"><i class="fa-solid fa-plus"></i></button>
+    <button onclick="alterarFonte(-1)" title="Diminuir fonte"><i class="fa-solid fa-minus"></i></button>
+    <button onclick="lerPagina()" title="Leitura por voz"><i class="fa-solid fa-volume-high"></i></button>
+    <button onclick="pararLeitura()" title="Parar leitura"><i class="fa-solid fa-stop"></i></button>
+  </aside>
+
+  <!-- header -->
+
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"><img src="images/pin.png" alt="Turistando CE"></div>
+        Turistando CE
+      </a>
+
+      <div class="header-actions-group">
+        <div class="header-actions-icon">
+          <button class="btn-icon" id="btn-dark" title="Modo escuro" onclick="toggleDarkMode()">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <button class="acessibilidade-toggle" id="btn-acessibilidade" onclick="toggleAcessibilidade()"
+            aria-expanded="false" aria-label="Mostrar acessibilidade" title="Mostrar acessibilidade">
+            <i class="fa-solid fa-universal-access"></i>
+          </button>
+        </div>
+
+        <!-- Perfil do usuário -->
+        <div class="profile-menu" id="profile-menu">
+          <button class="profile-trigger" id="profile-trigger" aria-expanded="false" aria-label="Menu do usuário">
+            <div class="profile-avatar" id="profile-avatar">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <span class="profile-name" id="profile-name">Entrar</span>
+            <i class="fa-solid fa-chevron-down profile-arrow"></i>
+          </button>
+          <div class="profile-dropdown" id="profile-dropdown">
+            <!-- Conteúdo preenchido via JS -->
+          </div>
+        </div>
+      </div>
+      <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </header>
+  <div class="nav-overlay" id="nav-overlay" onclick="toggleMenu()"></div>
+  <div id="user-auth-mobile" class="hidden"></div>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>Experiências no Ceará</h1>
+      <p>Encontre passeios completos com roteiro, empresa, duração, preço e nível de dificuldade.</p>
+
+      <div class="advanced-search-box">
+        <div class="search-main-input">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="busca-experiencias" placeholder="Buscar por nome, cidade, empresa ou tag">
+        </div>
+
+        <div class="filter-grid">
+          <div class="filter-group flex-1">
+            <span class="filter-label">Cidade</span>
+            <select class="filter-select" id="filtro-experiencia-cidade">
+              <option value="todas">Todas</option>
+            </select>
+          </div>
+
+          <div class="filter-group flex-1">
+            <span class="filter-label">Categoria</span>
+            <select class="filter-select" id="filtro-experiencia-categoria">
+              <option value="todas">Todas</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label">Preço Máximo</span>
+            <div class="filter-slider-wrap">
+              <input type="range" class="filter-slider" id="filtro-experiencia-preco" min="0" max="500" step="10"
+                value="500">
+              <span class="slider-val" id="experiencia-preco-label">Até R$ 500</span>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label">Duração</span>
+            <select class="filter-select" id="filtro-experiencia-duracao">
+              <option value="todas">Todas</option>
+              <option value="curta">Curta</option>
+              <option value="media">Média</option>
+              <option value="longa">Longa</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label">Avaliação mínima</span>
+            <select class="filter-select" id="filtro-experiencia-avaliacao">
+              <option value="0">Todas</option>
+              <option value="4">4.0+</option>
+              <option value="4.5">4.5+</option>
+              <option value="4.8">4.8+</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label">Ordenar</span>
+            <select class="filter-select" id="filtro-experiencia-ordem">
+              <option value="relevancia">Relevância</option>
+              <option value="avaliacao-melhor">Melhor avaliação</option>
+              <option value="preco-menor">Menor preço</option>
+              <option value="preco-maior">Maior preço</option>
+              <option value="duracao-menor">Menor duração</option>
+              <option value="duracao-maior">Maior duração</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="results-summary-row">
+          <button class="summary-chip total active">Todos <span id="experiencias-total">0</span></button>
+          <span class="summary-chip">Destaques <span id="experiencias-destaque-total">0</span></span>
+          <span class="summary-chip">Cidades <span id="experiencias-cidades-total">0</span></span>
+        </div>
+
+        <div class="results-meta" id="experiencias-meta">0 experiência(s) encontrada(s)</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 24px;">
+    <div class="container">
+      <div class="section-title fade-in">
+        <h2>Destaques rápidos</h2>
+        <p>Experiências mais procuradas para começar sua busca com segurança e velocidade.</p>
+      </div>
+      <div class="grid grid-3" id="grid-experiencias-destaque"></div>
+    </div>
+  </section>
+
+  <section class="section section--compact">
+    <div class="container">
+      <div class="section-title fade-in">
+        <h2>Catálogo de experiências</h2>
+        <p>Use os filtros acima e encontre a atividade ideal para sua viagem.</p>
+      </div>
+
+      <div class="filter-group" style="margin-bottom: 24px;">
+        <span class="filter-label">Tags rápidas</span>
+        <div class="filter-chips" id="tags-experiencias"></div>
+      </div>
+
+      <div class="grid grid-3" id="grid-experiencias"></div>
+    </div>
+  </section>
+
+  <footer class="footer" id="contato">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>🌿 Turistando CE</h3>
+          <p>Experiências pensadas para facilitar a descoberta do Ceará.</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Turistando CE.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="btn-top" id="btn-top" onclick="window.scrollTo({top:0})" title="Voltar ao topo">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
+  <script src="data/cidades.js"></script>
+  <script src="data/hoteis.js"></script>
+  <script src="data/restaurantes.js"></script>
+  <script src="data/passeios.js"></script>
+  <script src="data/avaliacoes.js"></script>
+  <script src="data/galeria.js"></script>
+  <script src="js/experiencias.js"></script>
+  <script src="js/script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro - Turistando CE</title>
+  <meta name="description" content="Crie sua conta ou cadastre sua empresa no Turistando CE com um fluxo guiado, moderno e intuitivo.">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body class="cadastro-body">
+  <aside class="acessibilidade-bar hidden" aria-label="Acessibilidade" aria-hidden="true">
+    <button onclick="alterarFonte(1)" title="Aumentar fonte"><i class="fa-solid fa-plus"></i></button>
+    <button onclick="alterarFonte(-1)" title="Diminuir fonte"><i class="fa-solid fa-minus"></i></button>
+    <button onclick="lerPagina()" title="Leitura por voz"><i class="fa-solid fa-volume-high"></i></button>
+    <button onclick="pararLeitura()" title="Parar leitura"><i class="fa-solid fa-stop"></i></button>
+  </aside>
+
+  <header class="header header--internal" id="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"><img src="images/pin.png" alt="Turistando CE"></div>
+        Turistando CE
+      </a>
+
+      <div class="header-actions-group">
+        <div class="header-actions-icon">
+          <button class="btn-icon" id="btn-dark" title="Modo escuro" onclick="toggleDarkMode()">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <button class="acessibilidade-toggle" id="btn-acessibilidade" onclick="toggleAcessibilidade()"
+            aria-expanded="false" aria-label="Mostrar acessibilidade" title="Mostrar acessibilidade">
+            <i class="fa-solid fa-universal-access"></i>
+          </button>
+        </div>
+        <div class="profile-menu" id="profile-menu">
+          <button class="profile-trigger" id="profile-trigger" aria-expanded="false" aria-label="Menu do usuário">
+            <div class="profile-avatar" id="profile-avatar">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <span class="profile-name" id="profile-name">Entrar</span>
+            <i class="fa-solid fa-chevron-down profile-arrow"></i>
+          </button>
+          <div class="profile-dropdown" id="profile-dropdown"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="nav-overlay" id="nav-overlay" onclick="toggleMenu()"></div>
+  <div id="user-auth-mobile" class="hidden"></div>
+
+  <main class="cadastro-modern">
+    <section class="cadastro-modern__hero">
+      <div class="cadastro-modern__hero-glow cadastro-modern__hero-glow--a"></div>
+      <div class="cadastro-modern__hero-glow cadastro-modern__hero-glow--b"></div>
+
+      <div class="cadastro-modern__hero-content">
+        <span class="cadastro-modern__eyebrow">Turistando CE</span>
+        <h1>Monte sua página com a sensação de estar criando algo de verdade.</h1>
+        <p>
+          Um cadastro guiado, leve e bonito, com etapas curtas, validação em tempo real e uma prévia fiel de como sua
+          empresa ou perfil vai aparecer no Turistando.
+        </p>
+
+        <div class="cadastro-modern__highlights">
+          <article>
+            <strong>7 etapas</strong>
+            <span>para empresas, com menus dinâmicos</span>
+          </article>
+          <article>
+            <strong>Preview vivo</strong>
+            <span>imagem, tags, preço e descrição</span>
+          </article>
+          <article>
+            <strong>Mobile first</strong>
+            <span>parece um app nativo no celular</span>
+          </article>
+        </div>
+
+        <div class="cadastro-modern__story">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <div>
+            <strong>Fluxo inspirado em Airbnb, Booking, Google Business Profile e iFood</strong>
+            <p>Menos formulário, mais construção de presença digital.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cadastro-modern__workspace">
+      <div class="wizard-shell">
+        <div class="wizard-shell__header">
+          <div>
+            <span class="wizard-shell__label">Cadastro guiado</span>
+            <h2 id="wizard-title">Criar conta</h2>
+            <p id="wizard-subtitle">Vamos montar seu perfil com cuidado, passo a passo.</p>
+          </div>
+
+          <div class="wizard-mode" role="tablist" aria-label="Tipo de cadastro">
+            <button type="button" class="wizard-mode__btn active" data-mode="usuario" aria-selected="true">
+              <i class="fa-solid fa-user"></i>
+              Usuário
+            </button>
+            <button type="button" class="wizard-mode__btn" data-mode="empresa" aria-selected="false">
+              <i class="fa-solid fa-shop"></i>
+              Empresa
+            </button>
+          </div>
+        </div>
+
+        <div class="wizard-progress" aria-label="Progresso do cadastro">
+          <div class="wizard-progress__track">
+            <span class="wizard-progress__fill" id="wizard-progress-fill"></span>
+          </div>
+          <ol class="wizard-stepper" id="wizard-stepper"></ol>
+        </div>
+
+        <div class="wizard-alert" id="wizard-alert" aria-live="polite"></div>
+
+        <form id="wizard-user-form" class="wizard-form active" novalidate>
+          <div class="wizard-step active" data-step-key="basic">
+            <div class="wizard-step__intro">
+              <h3>Informações básicas</h3>
+              <p>Começamos pelo essencial para o perfil ficar pessoal, confiável e pronto para uso.</p>
+            </div>
+
+            <div class="wizard-grid wizard-grid--2">
+              <div class="field">
+                <label for="user-nome">Nome</label>
+                <input type="text" id="user-nome" autocomplete="given-name" placeholder="Seu nome" required>
+                <small class="field-message" data-for="user-nome"></small>
+              </div>
+
+              <div class="field">
+                <label for="user-sobrenome">Sobrenome</label>
+                <input type="text" id="user-sobrenome" autocomplete="family-name" placeholder="Seu sobrenome" required>
+                <small class="field-message" data-for="user-sobrenome"></small>
+              </div>
+            </div>
+
+            <div class="wizard-grid wizard-grid--2">
+              <div class="field">
+                <label>Foto de perfil</label>
+                <div class="source-switch" data-target="user-photo">
+                  <button type="button" class="source-switch__btn active" data-source="upload">Upload</button>
+                  <button type="button" class="source-switch__btn" data-source="link">Link</button>
+                </div>
+                <div class="source-panel active" data-source-panel="upload" id="user-photo-upload-panel">
+                  <input type="file" id="user-photo-file" accept="image/*">
+                </div>
+                <div class="source-panel" data-source-panel="link" id="user-photo-link-panel">
+                  <input type="url" id="user-photo-link" placeholder="https://exemplo.com/minha-foto.jpg">
+                </div>
+                <small class="field-message" data-for="user-photo"></small>
+              </div>
+
+              <div class="field field--preview">
+                <div class="mini-preview mini-preview--avatar">
+                  <div class="mini-preview__avatar" id="user-photo-preview">
+                    <i class="fa-solid fa-user"></i>
+                  </div>
+                  <div>
+                    <strong>Seu cartão de entrada</strong>
+                    <p id="user-preview-name">Nome completo aparecerá aqui</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="wizard-grid wizard-grid--2">
+              <div class="field">
+                <label for="user-email">E-mail</label>
+                <input type="email" id="user-email" autocomplete="email" placeholder="voce@exemplo.com" required>
+                <small class="field-message" data-for="user-email"></small>
+              </div>
+
+              <div class="field">
+                <label for="user-telefone">Telefone</label>
+                <input type="tel" id="user-telefone" autocomplete="tel" placeholder="(85) 99999-9999" required>
+                <small class="field-message" data-for="user-telefone"></small>
+              </div>
+            </div>
+          </div>
+
+          <div class="wizard-step" data-step-key="location">
+            <div class="wizard-step__intro">
+              <h3>Localização e contexto</h3>
+              <p>Esses dados ajudam a personalizar a experiência e facilitar contato e recuperação de conta.</p>
+            </div>
+
+            <div class="wizard-grid wizard-grid--3">
+              <div class="field">
+                <label for="user-cidade">Cidade</label>
+                <select id="user-cidade" required>
+                  <option value="">Selecione</option>
+                </select>
+                <small class="field-message" data-for="user-cidade"></small>
+              </div>
+
+              <div class="field">
+                <label for="user-estado">Estado</label>
+                <select id="user-estado" required>
+                  <option value="">Selecione</option>
+                </select>
+                <small class="field-message" data-for="user-estado"></small>
+              </div>
+
+              <div class="field">
+                <label for="user-nascimento">Data de nascimento <span class="field-optional">(opcional)</span></label>
+                <input type="date" id="user-nascimento">
+                <small class="field-message" data-for="user-nascimento"></small>
+              </div>
+            </div>
+          </div>
+
+          <div class="wizard-step" data-step-key="interests">
+            <div class="wizard-step__intro">
+              <h3>Interesses turísticos</h3>
+              <p>Selecione o que mais combina com você. Isso ajuda a personalizar sugestões e destaques.</p>
+            </div>
+
+            <div class="chip-section">
+              <div class="chip-section__header">
+                <strong>Interesses</strong>
+                <span>Escolha pelo menos um</span>
+              </div>
+              <div class="chip-grid" id="user-interests"></div>
+            </div>
+
+            <div class="chip-section">
+              <div class="chip-section__header">
+                <strong>Favoritos iniciais</strong>
+                <span>O que você quer ver primeiro</span>
+              </div>
+              <div class="chip-grid" id="user-favorites"></div>
+            </div>
+          </div>
+
+          <div class="wizard-step" data-step-key="security">
+            <div class="wizard-step__intro">
+              <h3>Senha e termos</h3>
+              <p>Finalize com uma senha forte e aceite os termos para concluir o cadastro.</p>
+            </div>
+
+            <div class="wizard-grid wizard-grid--2">
+              <div class="field">
+                <label for="user-senha">Senha</label>
+                <input type="password" id="user-senha" autocomplete="new-password" placeholder="Crie uma senha forte" required>
+                <small class="field-message" data-for="user-senha"></small>
+                <div class="strength-meter" aria-hidden="true">
+                  <span class="strength-meter__bar" id="user-strength-bar"></span>
+                </div>
+                <p class="strength-text" id="user-strength-text">Força da senha: ainda vazia</p>
+              </div>
+
+              <div class="field">
+                <label for="user-confirmar">Confirmar senha</label>
+                <input type="password" id="user-confirmar" autocomplete="new-password" placeholder="Repita a senha" required>
+                <small class="field-message" data-for="user-confirmar"></small>
+              </div>
+            </div>
+
+            <label class="terms-box">
+              <input type="checkbox" id="user-termos" required>
+              <span>Li e aceito os termos de uso e a política de privacidade.</span>
+            </label>
+            <small class="field-message" data-for="user-termos"></small>
+          </div>
+
+          <div class="wizard-step wizard-step--review" data-step-key="review">
+            <div class="wizard-step__intro">
+              <h3>Revisão final</h3>
+              <p>Confirme os dados antes de criar sua conta. Depois disso, você já entra no Turistando.</p>
+            </div>
+
+            <div class="review-summary" id="user-review-summary"></div>
+          </div>
+
+          <div class="wizard-actions">
+            <button type="button" class="btn-secondary wizard-back" data-target="usuario">Voltar</button>
+            <button type="button" class="btn-primary wizard-next" data-target="usuario">Continuar</button>
+            <button type="submit" class="btn-primary wizard-submit hidden" data-target="usuario">Criar conta</button>
+          </div>
+        </form>
+
+        <form id="wizard-company-form" class="wizard-form" novalidate>
+          <div class="wizard-step active" data-step-key="category">
+            <div class="wizard-step__intro">
+              <h3>Escolha a categoria</h3>
+              <p>Defina primeiro o tipo de negócio para mostrarmos apenas os campos que importam.</p>
+            </div>
+
+            <div class="category-grid" id="company-categories"></div>
+            <small class="field-message" data-for="company-categoria"></small>
+          </div>
+
+          <div class="wizard-step" data-step-key="basic">
+            <div class="wizard-step__intro">
+              <h3>Informações básicas</h3>
+              <p>Conte a essência do seu negócio com clareza. O preview ao lado responde na hora.</p>
+            </div>
+
+            <div class="wizard-grid wizard-grid--2">
+              <div class="field">
+                <label for="company-nome">Nome</label>
+                <input type="text" id="company-nome" placeholder="Nome do estabelecimento" required>
+                <small class="field-message" data-for="company-nome"></small>
+              </div>
+
+              <div class="field">
+                <label>Faixa de preço <span class="field-optional">(preview)</span></label>
+                <div class="wizard-grid wizard-grid--2 wizard-grid--compact">
+                  <input type="number" id="company-preco-min" placeholder="Mínimo" min="0">
+                  <input type="number" id="company-preco-max" placeholder="Máximo" min="0">
+                </div>
+                <small class="field-message" data-for="company-preco"></small>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="company-descricao">Descrição</label>
+              <textarea id="company-descricao" rows="5" placeholder="Descreva o que faz seu negócio ser especial..." required></textarea>
+              <small class="field-message" data-for="company-descricao"></small>
+            </div>
+
+            <div class="chip-section">
+              <div class="chip-section__header">
+                <strong>Tags</strong>
+                <span>Adicione os diferenciais que aparecem no card</span>
+              </div>
+              <div class="chip-grid" id="company-tags"></div>
+            </div>
+          </div>
+
+          <div class="wizard-step" data-step-key="location">
+            <div class="wizard-step__intro">
+              <h3>Localização</h3>
+              <p>Deixe o endereço pronto para o mapa e para a busca por proximidade.</p>
+            </div>
+
+            <div class="wizard-grid wizard-grid--3">
+              <div class="field">
+                <label for="company-cidade">Cidade</label>
+                <select id="company-cidade" required>
+                  <option value="">Selecione</option>
+                </select>
+                <small class="field-message" data-for="company-cidade"></small>
+              </div>
+
+              <div class="field">
+                <label for="company-estado">Estado</label>
+                <select id="company-estado" required>
+                  <option value="">Selecione</option>
+                </select>
+                <small class="field-message" data-for="company-estado"></small>
+              </div>
+
+              <div class="field">
+                <label for="company-cep">CEP</label>
+                <input type="text" id="company-cep" placeholder="00000-000" required>
+                <small class="field-message" data-for="company-cep"></small>
+              </div>
+            </div>
+
+            <div class="wizard-grid wizard-grid--2">
+              <div class="field">
+                <label for="company-endereco">Endereço</label>
+                <input type="text" id="company-endereco" placeholder="Rua, número, bairro" required>
+                <small class="field-message" data-for="company-endereco"></small>
+              </div>
+
+              <div class="field">
+                <label for="company-mapa-id">Mapa ID</label>
+                <input type="text" id="company-mapa-id" placeholder="ID interno ou ponto do mapa">
+                <small class="field-message" data-for="company-mapa-id"></small>
+              </div>
+            </div>
+
+            <div class="wizard-grid wizard-grid--2">
+              <div class="field">
+                <label for="company-lat">Latitude</label>
+                <input type="number" id="company-lat" step="any" placeholder="-3.7319">
+                <small class="field-message" data-for="company-lat"></small>
+              </div>
+
+              <div class="field">
+                <label for="company-lng">Longitude</label>
+                <input type="number" id="company-lng" step="any" placeholder="-38.5267">
+                <small class="field-message" data-for="company-lng"></small>
+              </div>
+            </div>
+
+            <div class="map-preview" id="company-map-preview">
+              <div class="map-preview__icon"><i class="fa-solid fa-map-location-dot"></i></div>
+              <strong>Mapa ao vivo</strong>
+              <p>Assim que latitude e longitude forem preenchidas, este espaço mostra a posição do local.</p>
+              <span id="company-map-preview-copy">Sem coordenadas ainda</span>
+            </div>
+          </div>
+
+          <div class="wizard-step" data-step-key="contact">
+            <div class="wizard-step__intro">
+              <h3>Contato e presença digital</h3>
+              <p>Telefone é essencial. Site e Instagram são opcionais, mas ajudam muito na conversão.</p>
+            </div>
+
+            <div class="wizard-grid wizard-grid--2">
+              <div class="field">
+                <label for="company-telefone">Telefone</label>
+                <input type="tel" id="company-telefone" placeholder="(85) 99999-9999" required>
+                <small class="field-message" data-for="company-telefone"></small>
+              </div>
+
+              <div class="field">
+                <label for="company-horario">Horário de funcionamento</label>
+                <input type="text" id="company-horario" placeholder="Seg a Sex, 8h às 18h" required>
+                <small class="field-message" data-for="company-horario"></small>
+              </div>
+            </div>
+
+            <div class="wizard-grid wizard-grid--2">
+              <div class="field">
+                <label for="company-site">Site <span class="field-optional">(opcional)</span></label>
+                <input type="url" id="company-site" placeholder="https://meusite.com">
+                <small class="field-message" data-for="company-site"></small>
+              </div>
+
+              <div class="field">
+                <label for="company-instagram">Instagram <span class="field-optional">(opcional)</span></label>
+                <input type="text" id="company-instagram" placeholder="@meuperfil">
+                <small class="field-message" data-for="company-instagram"></small>
+              </div>
+            </div>
+          </div>
+
+          <div class="wizard-step" data-step-key="media">
+            <div class="wizard-step__intro">
+              <h3>Fotos e identidade visual</h3>
+              <p>Escolha uma imagem principal e construa uma galeria com miniaturas, ordem e destaque.</p>
+            </div>
+
+            <div class="wizard-grid wizard-grid--2">
+              <div class="media-block">
+                <div class="media-block__head">
+                  <div>
+                    <strong>Imagem principal</strong>
+                    <p>Ela aparece no card do Turistando.</p>
+                  </div>
+                </div>
+                <div class="source-switch" data-target="company-main-image">
+                  <button type="button" class="source-switch__btn active" data-source="upload">Upload</button>
+                  <button type="button" class="source-switch__btn" data-source="link">Link</button>
+                </div>
+                <div class="source-panel active" data-source-panel="upload">
+                  <input type="file" id="company-main-file" accept="image/*">
+                </div>
+                <div class="source-panel" data-source-panel="link">
+                  <input type="url" id="company-main-link" placeholder="https://exemplo.com/foto-principal.jpg">
+                </div>
+                <div class="main-image-preview" id="company-main-preview">
+                  <span>Prévia da imagem principal</span>
+                </div>
+                <small class="field-message" data-for="company-imagem"></small>
+              </div>
+
+              <div class="media-block">
+                <div class="media-block__head">
+                  <div>
+                    <strong>Galeria</strong>
+                    <p>Adicione quantas fotos quiser. Você pode excluir e reordenar depois.</p>
+                  </div>
+                </div>
+                <div class="source-switch" data-target="company-gallery">
+                  <button type="button" class="source-switch__btn active" data-source="upload">Upload</button>
+                  <button type="button" class="source-switch__btn" data-source="link">Link</button>
+                </div>
+                <div class="source-panel active" data-source-panel="upload">
+                  <input type="file" id="company-gallery-file" accept="image/*" multiple>
+                </div>
+                <div class="source-panel" data-source-panel="link">
+                  <div class="source-link-row">
+                    <input type="url" id="company-gallery-link" placeholder="https://exemplo.com/foto.jpg">
+                    <button type="button" class="btn-mini" id="company-gallery-add-link">Adicionar</button>
+                  </div>
+                </div>
+
+                <div class="media-gallery" id="company-gallery-list"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="wizard-step" data-step-key="services">
+            <div class="wizard-step__intro">
+              <h3>Serviços</h3>
+              <p>Aqui o formulário se adapta à categoria escolhida e destaca o que realmente importa.</p>
+            </div>
+
+            <div class="chip-section">
+              <div class="chip-section__header">
+                <strong id="company-services-title">Selecione os serviços</strong>
+                <span id="company-services-helper">Marque os diferenciais do seu negócio</span>
+              </div>
+              <div class="chip-grid" id="company-services"></div>
+            </div>
+
+            <div class="restaurant-panel hidden" id="restaurant-menu-mode-panel">
+              <div class="chip-section__header">
+                <strong>Cardápio</strong>
+                <span>Somente para restaurantes e similares</span>
+              </div>
+              <div class="menu-switch">
+                <button type="button" class="menu-switch__btn active" data-menu-mode="photos">Fotos do cardápio</button>
+                <button type="button" class="menu-switch__btn" data-menu-mode="manual">Cardápio manual</button>
+              </div>
+            </div>
+
+            <div class="restaurant-menu restaurant-menu--photos hidden" id="restaurant-menu-photos">
+              <div class="media-block">
+                <div class="media-block__head">
+                  <div>
+                    <strong>Fotos do cardápio</strong>
+                    <p>Upload ou link das páginas do menu.</p>
+                  </div>
+                </div>
+                <div class="source-switch" data-target="company-menu">
+                  <button type="button" class="source-switch__btn active" data-source="upload">Upload</button>
+                  <button type="button" class="source-switch__btn" data-source="link">Link</button>
+                </div>
+                <div class="source-panel active" data-source-panel="upload">
+                  <input type="file" id="company-menu-file" accept="image/*" multiple>
+                </div>
+                <div class="source-panel" data-source-panel="link">
+                  <div class="source-link-row">
+                    <input type="url" id="company-menu-link" placeholder="https://exemplo.com/menu.jpg">
+                    <button type="button" class="btn-mini" id="company-menu-add-link">Adicionar</button>
+                  </div>
+                </div>
+                <div class="media-gallery" id="company-menu-gallery"></div>
+              </div>
+            </div>
+
+            <div class="restaurant-menu restaurant-menu--manual hidden" id="restaurant-menu-manual">
+              <div class="menu-builder">
+                <div class="menu-builder__header">
+                  <div>
+                    <strong>Cardápio manual</strong>
+                    <p>Mais parecido com o iFood, com categorias e itens ilimitados.</p>
+                  </div>
+                  <button type="button" class="btn-mini" id="company-menu-add-category">Nova categoria</button>
+                </div>
+
+                <div class="menu-categories" id="company-menu-categories"></div>
+                <div class="menu-items" id="company-menu-items"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="wizard-step wizard-step--review" data-step-key="review">
+            <div class="wizard-step__intro">
+              <h3>Revisão final</h3>
+              <p>Veja a estrutura pronta, confirme os dados e publique sua empresa.</p>
+            </div>
+
+            <div class="review-summary review-summary--company">
+              <div class="review-json-head">
+                <strong>Objeto final</strong>
+                <button type="button" class="btn-mini" id="company-copy-json">Copiar JSON</button>
+              </div>
+              <pre id="company-json-preview"></pre>
+            </div>
+          </div>
+
+          <div class="wizard-actions">
+            <button type="button" class="btn-secondary wizard-back" data-target="empresa">Voltar</button>
+            <button type="button" class="btn-primary wizard-next" data-target="empresa">Continuar</button>
+            <button type="submit" class="btn-primary wizard-submit hidden" data-target="empresa">Publicar empresa</button>
+          </div>
+        </form>
+      </div>
+
+      <aside class="preview-shell">
+        <div class="preview-shell__sticky">
+          <div class="preview-header">
+            <span class="wizard-shell__label">Pré-visualização</span>
+            <h3 id="preview-title">Como seu perfil vai aparecer</h3>
+            <p id="preview-subtitle">Ajuste campos e veja a experiência em tempo real.</p>
+          </div>
+
+          <div class="company-preview-card" id="company-preview-card">
+            <div class="company-preview-card__image">
+              <img id="company-preview-image" alt="Prévia da empresa" src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1200&h=800&fit=crop">
+              <span class="company-preview-card__badge" id="company-preview-category">Categoria</span>
+            </div>
+            <div class="company-preview-card__body">
+              <div class="company-preview-card__top">
+                <div>
+                  <h4 id="company-preview-name">Nome do estabelecimento</h4>
+                  <p id="company-preview-city">Cidade, CE</p>
+                </div>
+                <div class="company-preview-card__rating">
+                  <strong>0,0</strong>
+                  <span>sem avaliações</span>
+                </div>
+              </div>
+              <div class="preview-tags" id="company-preview-tags"></div>
+              <div class="company-preview-card__price" id="company-preview-price">R$ 0</div>
+              <p class="company-preview-card__desc" id="company-preview-desc">
+                Sua descrição aparecerá aqui com um recorte elegante e convidativo.
+              </p>
+              <div class="company-preview-card__meta">
+                <span><i class="fa-solid fa-phone"></i> <em id="company-preview-phone">Telefone</em></span>
+                <span><i class="fa-solid fa-clock"></i> <em id="company-preview-hours">Horário</em></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="user-preview-card hidden" id="user-preview-card">
+            <div class="user-preview-card__avatar" id="user-preview-avatar">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <strong id="user-preview-fullname">Seu nome completo</strong>
+            <p id="user-preview-location">Cidade, Estado</p>
+            <div class="preview-tags" id="user-preview-tags"></div>
+            <div class="user-preview-card__note">
+              <span>Seu perfil será usado para sugestões e favoritos iniciais.</span>
+            </div>
+          </div>
+
+          <div class="preview-meta-panel">
+            <div>
+              <span>Estado do fluxo</span>
+              <strong id="preview-flow-status">Usuário</strong>
+            </div>
+            <div>
+              <span>Próximo passo</span>
+              <strong id="preview-next-step">Informações básicas</strong>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <div class="toast-root" id="toast-root" aria-live="polite" aria-atomic="true"></div>
+
+  <div class="success-modal" id="success-modal" aria-hidden="true">
+    <div class="success-modal__card" role="dialog" aria-modal="true" aria-labelledby="success-title">
+      <div class="success-modal__icon"><i class="fa-solid fa-circle-check"></i></div>
+      <h3 id="success-title">Cadastro concluído</h3>
+      <p id="success-text">Seu cadastro foi salvo com sucesso.</p>
+      <button type="button" class="btn-primary" id="success-close">Continuar</button>
+    </div>
+  </div>
+
+  <script src="data/cidades.js"></script>
+  <script src="data/hoteis.js"></script>
+  <script src="data/restaurantes.js"></script>
+  <script src="data/passeios.js"></script>
+  <script src="data/avaliacoes.js"></script>
+  <script src="data/galeria.js"></script>
+  <script src="js/script.js"></script>
+</body>
+
+</html>

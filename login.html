@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Turistando CE</title>
+  <meta name="description" content="Faça login no Turistando CE e acesse seus roteiros e favoritos.">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="#index.html" class="logo">
+        <div class="logo-icon"><img src="images/pin.png" alt="Turistando CE"></div>
+        Turistando CE
+      </a>
+
+      <div class="header-actions-group">
+        <div class="header-actions-icon">
+          <button class="btn-icon" id="btn-dark" title="Modo escuro" onclick="toggleDarkMode()">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <button class="acessibilidade-toggle" id="btn-acessibilidade" onclick="toggleAcessibilidade()"
+            aria-expanded="false" aria-label="Mostrar acessibilidade" title="Mostrar acessibilidade">
+            <i class="fa-solid fa-universal-access"></i>
+          </button>
+        </div>
+  </header>
+  <div class="nav-overlay" id="nav-overlay" onclick="toggleMenu()"></div>
+  <div id="user-auth-mobile" class="hidden"></div>
+        <div class="profile-menu" id="profile-menu">
+          <button class="profile-trigger" id="profile-trigger" aria-expanded="false" aria-label="Menu do usuário">
+            <div class="profile-avatar" id="profile-avatar">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <span class="profile-name" id="profile-name">Entrar</span>
+            <i class="fa-solid fa-chevron-down profile-arrow"></i>
+          </button>
+          <div class="profile-dropdown" id="profile-dropdown"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="nav-overlay" id="nav-overlay" onclick="toggleMenu()"></div>
+  <div id="user-auth-mobile" class="hidden"></div>
+
+  <div class="cadastro-page">
+    <!-- Lado esquerdo — Visual -->
+    <div class="cadastro-visual">
+      <div class="cadastro-visual-bg cadastro-visual-bg--login"></div>
+      <div class="cadastro-visual-content">
+        <h2>🌿 Turistando CE</h2>
+        <p>Bem-vindo de volta! Acesse sua conta para ver seus locais favoritos e continuar planejando sua viagem pelo
+          Ceará.</p>
+      </div>
+    </div>
+
+    <!-- Lado direito — Formulário -->
+    <div class="cadastro-form-area">
+      <form class="cadastro-form" onsubmit="return realizarLogin(event)">
+        <h2>Fazer login</h2>
+        <p>Insira seus dados para entrar.</p>
+
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" placeholder="seuemail@exemplo.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" placeholder="Sua senha" required>
+        </div>
+
+        <button type="submit" class="btn-submit">Entrar</button>
+
+        <p class="form-link">
+          Ainda não tem conta? <a href="cadastro.html">Cadastre-se</a><br><br>
+          <a href="index.html">Voltar ao site</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========== SCRIPTS ========== -->
+  <script src="data/cidades.js"></script>
+  <script src="data/hoteis.js"></script>
+  <script src="data/restaurantes.js"></script>
+  <script src="data/passeios.js"></script>
+  <script src="data/avaliacoes.js"></script>
+  <script src="data/galeria.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    function realizarLogin(e) {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const senha = document.getElementById('senha').value;
+
+      if (loginUsuario(email, senha)) {
+        window.location.href = 'index.html';
+      }
+      return false;
+    }
+  </script>
+</body>
+
+</html>

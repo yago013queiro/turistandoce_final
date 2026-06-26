@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha Lista — Turistando CE</title>
+  <meta name="description" content="Perfil do viajante com foto, locais visitados, favoritos e quero conhecer.">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+  <aside class="acessibilidade-bar hidden" aria-label="Acessibilidade" aria-hidden="true">
+    <button onclick="alterarFonte(1)" title="Aumentar fonte"><i class="fa-solid fa-plus"></i></button>
+    <button onclick="alterarFonte(-1)" title="Diminuir fonte"><i class="fa-solid fa-minus"></i></button>
+    <button onclick="lerPagina()" title="Leitura por voz"><i class="fa-solid fa-volume-high"></i></button>
+    <button onclick="pararLeitura()" title="Parar leitura"><i class="fa-solid fa-stop"></i></button>
+  </aside>
+
+ <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="#index.html" class="logo">
+        <div class="logo-icon"><img src="images/pin.png" alt="Turistando CE"></div>
+        Turistando CE
+      </a>
+      
+      <div class="header-actions-group">
+        <div class="header-actions-icon">
+          <button class="btn-icon" id="btn-dark" title="Modo escuro" onclick="toggleDarkMode()">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <button class="acessibilidade-toggle" id="btn-acessibilidade" onclick="toggleAcessibilidade()"
+            aria-expanded="false" aria-label="Mostrar acessibilidade" title="Mostrar acessibilidade">
+            <i class="fa-solid fa-universal-access"></i>
+          </button>
+        </div>
+
+        <!-- Perfil do usuário -->
+        <div class="profile-menu" id="profile-menu">
+          <button class="profile-trigger" id="profile-trigger" aria-expanded="false" aria-label="Menu do usuário">
+            <div class="profile-avatar" id="profile-avatar">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <span class="profile-name" id="profile-name">Entrar</span>
+            <i class="fa-solid fa-chevron-down profile-arrow"></i>
+          </button>
+          <div class="profile-dropdown" id="profile-dropdown">
+            <!-- Conteúdo preenchido via JS -->
+          </div>
+        </div>
+      </div>
+      <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </header>
+  <div class="nav-overlay" id="nav-overlay" onclick="toggleMenu()"></div>
+  <div id="user-auth-mobile" class="hidden"></div>
+
+  <main class="lista-page">
+    <section class="container lista-shell">
+      <div class="lista-hero">
+        <section class="perfil-card" id="perfil">
+          <div class="perfil-card__cover">
+            <div class="perfil-card__top">
+              <button class="perfil-avatar perfil-avatar--empty" id="perfil-avatar-btn" type="button"
+                aria-label="Alterar foto de perfil">
+                <i class="fa-solid fa-camera"></i>
+              </button>
+              <div class="perfil-meta">
+                <h1>Perfil</h1>
+                <p id="perfil-nome">Carregando...</p>
+                <p id="perfil-email"></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="perfil-card__body">
+            <p class="lista-section__subtitle">
+              Clique na sua foto para trocar a imagem do perfil. Aqui ficam reunidos os lugares que você já visitou, os
+              seus favoritos e tudo o que ainda quer conhecer.
+            </p>
+
+            <input type="file" id="perfil-photo-input" accept="image/*" hidden>
+
+            <div class="perfil-stats">
+              <div class="perfil-stat">
+                <span>Visitados</span>
+                <strong id="stat-visitados">0</strong>
+              </div>
+              <div class="perfil-stat">
+                <span>Favoritados</span>
+                <strong id="stat-favoritos">0</strong>
+              </div>
+              <div class="perfil-stat">
+                <span>Quero conhecer</span>
+                <strong id="stat-querok">0</strong>
+              </div>
+            </div>
+
+            <div class="perfil-actions">
+              <a class="btn-secondary" href="#favoritos"><i class="fa-solid fa-heart"></i> Ver favoritos</a>
+              <a class="btn-secondary" href="#quero-conhecer"><i class="fa-solid fa-star"></i> Quero conhecer</a>
+            </div>
+          </div>
+        </section>
+
+        <aside class="lista-card lista-section">
+          <h2>Resumo rápido</h2>
+          <p class="lista-section__subtitle">
+            <strong id="perfil-tipo">Viajante</strong> e explorando o Ceará por cidade, hotel e restaurante.
+          </p>
+
+          <div class="lista-chips" id="perfil-cidades-chip"></div>
+          <div class="lista-chips lista-chips--offset" id="perfil-categorias-chip"></div>
+        </aside>
+      </div>
+
+      <section class="lista-card lista-section">
+        <h2>Já visitei</h2>
+        <p class="lista-section__subtitle">Tudo o que você marcou como visitado aparece aqui, separado por cidades,
+          hotéis e restaurantes.</p>
+
+        <div class="lista-grid">
+          <div>
+            <h3 class="lista-heading">Cidades</h3>
+            <div class="lista-chips" id="lista-cidades-visitadas"></div>
+          </div>
+          <div>
+            <h3 class="lista-heading">Hotéis e pousadas</h3>
+            <div class="lista-item-list" id="lista-hoteis-visitados"></div>
+          </div>
+        </div>
+
+        <div class="lista-grid lista-grid--offset">
+          <div>
+            <h3 class="lista-heading">Restaurantes</h3>
+            <div class="lista-item-list" id="lista-restaurantes-visitados"></div>
+          </div>
+          <div>
+            <h3 class="lista-heading">Acesso rápido</h3>
+            <div class="lista-empty">
+              Explore o <a href="mapa.html">mapa interativo</a> para encontrar novos pontos e voltar aos detalhes de
+              cada local.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="lista-bottom">
+        <section class="lista-card lista-section" id="favoritos">
+          <h2>Favoritados</h2>
+          <p class="lista-section__subtitle">Os lugares que você já curtiu e quer manter por perto.</p>
+          <div class="lista-grid">
+            <div>
+              <h3 class="lista-heading">Hotéis</h3>
+              <div class="lista-item-list" id="lista-favoritos-hoteis"></div>
+            </div>
+            <div>
+              <h3 class="lista-heading">Restaurantes</h3>
+              <div class="lista-item-list" id="lista-favoritos-restaurantes"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="lista-card lista-section" id="quero-conhecer">
+          <h2>Quero conhecer</h2>
+          <p class="lista-section__subtitle">A sua lista de desejo para planejar a próxima viagem.</p>
+          <div class="lista-grid">
+            <div>
+              <h3 class="lista-heading">Hotéis</h3>
+              <div class="lista-item-list" id="lista-querok-hoteis"></div>
+            </div>
+            <div>
+              <h3 class="lista-heading">Restaurantes</h3>
+              <div class="lista-item-list" id="lista-querok-restaurantes"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="lista-logout">
+        <button class="btn-plan" onclick="logoutUsuario()"><i class="fa-solid fa-right-from-bracket"></i> Sair da
+          conta</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="data/cidades.js"></script>
+  <script src="data/hoteis.js"></script>
+  <script src="data/restaurantes.js"></script>
+  <script src="data/passeios.js"></script>
+  <script src="data/mapa-pontos.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/minha-lista.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pesquisa Avançada — Turistando CE</title>
+  <meta name="description"
+    content="Pesquise por cidades, praias, hotéis, restaurantes e passeios detalhadamente no Ceará.">
+
+  <!-- Fontes & Ícones -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+  <!-- ========== BARRA DE ACESSIBILIDADE ========== -->
+  <aside class="acessibilidade-bar hidden" aria-label="Acessibilidade" aria-hidden="true">
+    <button onclick="alterarFonte(1)" title="Aumentar fonte"><i class="fa-solid fa-plus"></i></button>
+    <button onclick="alterarFonte(-1)" title="Diminuir fonte"><i class="fa-solid fa-minus"></i></button>
+    <button onclick="lerPagina()" title="Leitura por voz"><i class="fa-solid fa-volume-high"></i></button>
+    <button onclick="pararLeitura()" title="Parar leitura"><i class="fa-solid fa-stop"></i></button>
+  </aside>
+
+  <!-- ========== HEADER ========== -->
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="#" class="logo">
+        <div class="logo-icon"><img src="images/pin.png" alt="Turistando CE"></div>
+        Turistando CE
+      </a>
+      
+      <div class="header-actions-group">
+        <div class="header-actions-icon">
+          <button class="btn-icon" id="btn-dark" title="Modo escuro" onclick="toggleDarkMode()">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <button class="acessibilidade-toggle" id="btn-acessibilidade" onclick="toggleAcessibilidade()"
+            aria-expanded="false" aria-label="Mostrar acessibilidade" title="Mostrar acessibilidade">
+            <i class="fa-solid fa-universal-access"></i>
+          </button>
+        </div>
+
+        <!-- Perfil do usuário -->
+        <div class="profile-menu" id="profile-menu">
+          <button class="profile-trigger" id="profile-trigger" aria-expanded="false" aria-label="Menu do usuário">
+            <div class="profile-avatar" id="profile-avatar">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <span class="profile-name" id="profile-name">Entrar</span>
+            <i class="fa-solid fa-chevron-down profile-arrow"></i>
+          </button>
+          <div class="profile-dropdown" id="profile-dropdown">
+            <!-- Conteúdo preenchido via JS -->
+          </div>
+        </div>
+      </div>
+      <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </header>
+  <div class="nav-overlay" id="nav-overlay" onclick="toggleMenu()"></div>
+  <div id="user-auth-mobile" class="hidden"></div>
+
+  <!-- ========== CABEÇALHO DA PÁGINA ========== -->
+  <section class="page-header">
+    <div class="container">
+      <h1>Buscar no Ceará</h1>
+      <p>Encontre destinos, hotéis, restaurantes e muito mais</p>
+
+      <!-- Caixa de Pesquisa Avançada -->
+      <div class="advanced-search-box">
+
+        <!-- Input Principal -->
+        <div class="search-main-input">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="adv-search-text" placeholder="Para onde você quer ir?"
+            oninput="filtrarPesquisaAvancada()">
+          <button onclick="filtrarPesquisaAvancada()">Buscar</button>
+        </div>
+
+        <div class="filter-grid">
+
+          <!-- Filtro: Tipo -->
+          <div class="filter-group flex-1">
+            <span class="filter-label">Tipo</span>
+            <div class="filter-chips" id="adv-filter-type">
+              <button type="button" class="filter-chip active" data-type="todos">Todos</button>
+              <button type="button" class="filter-chip" data-type="cidades">Cidades</button>
+              <button type="button" class="filter-chip" data-type="hoteis">Hotéis</button>
+              <button type="button" class="filter-chip" data-type="restaurantes">Restaurantes</button>
+              <button type="button" class="filter-chip" data-type="passeios">Passeios</button>
+              <button type="button" class="filter-chip" data-type="experiencias">Experiências</button>
+            </div>
+          </div>
+
+          <!-- Filtro: Cidade -->
+          <div class="filter-group">
+            <span class="filter-label">Cidade</span>
+            <select class="filter-select" id="adv-filter-cidade" onchange="filtrarPesquisaAvancada()">
+              <option value="todas">Todas</option>
+              <!-- Preenchido via JS -->
+            </select>
+          </div>
+
+          <!-- Filtro: Tags (mais populares) -->
+          <div class="filter-group flex-1">
+            <span class="filter-label">Tags</span>
+            <div class="filter-chips" id="adv-filter-tags">
+              <button type="button" class="filter-chip" data-tag="Família">Família</button>
+              <button type="button" class="filter-chip" data-tag="Praia">Praia</button>
+              <button type="button" class="filter-chip" data-tag="Piscina">Piscina</button>
+              <button type="button" class="filter-chip" data-tag="Café da Manhã">Café da
+                Manhã</button>
+              <button type="button" class="filter-chip" data-tag="Regional">Regional</button>
+              <button type="button" class="filter-chip" data-tag="Natureza">Natureza</button>
+              <button type="button" class="filter-chip" data-tag="Casal">Casal</button>
+              <button type="button" class="filter-chip" data-tag="Serra">Serra</button>
+              <button type="button" class="filter-chip" data-tag="Frutos do Mar">Frutos do
+                Mar</button>
+              <button type="button" class="filter-chip" data-tag="Churrasco">Churrasco</button>
+              <button type="button" class="filter-chip" data-tag="Wi-Fi">Wi-Fi</button>
+              <button type="button" class="filter-chip" data-tag="Vista Mar">Vista Mar</button>
+            </div>
+          </div>
+
+          <!-- Filtro: Preço e Ordenação -->
+          <div class="filter-group">
+            <span class="filter-label">Preço Máximo</span>
+            <div class="filter-slider-wrap">
+              <input type="range" class="filter-slider" id="adv-filter-preco" min="0" max="2000" step="50" value="2000"
+                oninput="atualizarLabelPreco(this.value)" onchange="filtrarPesquisaAvancada()">
+              <span class="slider-val" id="adv-preco-label">Qualquer preço</span>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label">Ordenar</span>
+            <select class="filter-select" id="adv-filter-ordem" onchange="filtrarPesquisaAvancada()">
+              <option value="relevancia">Relevância</option>
+              <option value="preco-menor">Menor Preço</option>
+              <option value="preco-maior">Maior Preço</option>
+              <option value="avaliacao-melhor">Melhor Avaliação</option>
+            </select>
+          </div>
+
+        </div>
+
+        <!-- Resumo dos Resultados -->
+
+        <div class="results-meta" id="adv-results-meta">0 resultados encontrados</div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== RESULTADOS ========== -->
+  <section class="section section--compact">
+    <div class="container" id="adv-resultados-container">
+      <!-- Preenchido via JS -->
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer" id="contato">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>🌿 Turistando CE</h3>
+          <p>A magia do Ceará em um só lugar.</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Turistando CE.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== SCRIPTS ========== -->
+  <script src="data/cidades.js"></script>
+  <script src="data/hoteis.js"></script>
+  <script src="data/restaurantes.js"></script>
+  <script src="data/passeios.js"></script>
+  <script src="data/avaliacoes.js"></script>
+  <script src="data/galeria.js"></script>
+  <script src="js/experiencias.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Popular select de cidades
+      const selectCidade = document.getElementById('adv-filter-cidade');
+      if (selectCidade && typeof CIDADES !== 'undefined') {
+        CIDADES.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.nome;
+          opt.textContent = c.nome;
+          selectCidade.appendChild(opt);
+        });
+      }
+
+      // Chamar filtro inicial - já está tudo carregado
+      if (typeof filtrarPesquisaAvancada === 'function') {
+        filtrarPesquisaAvancada();
+      }
+    });
+  </script>
+</body>
+
+</html>

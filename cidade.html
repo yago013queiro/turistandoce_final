@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turistando CE — Destino</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+  <!-- ========== BARRA DE ACESSIBILIDADE ========== -->
+  <aside class="acessibilidade-bar hidden" aria-label="Acessibilidade" aria-hidden="true">
+    <button onclick="alterarFonte(1)" title="Aumentar fonte"><i class="fa-solid fa-plus"></i></button>
+    <button onclick="alterarFonte(-1)" title="Diminuir fonte"><i class="fa-solid fa-minus"></i></button>
+    <button onclick="lerPagina()" title="Leitura por voz"><i class="fa-solid fa-volume-high"></i></button>
+    <button onclick="pararLeitura()" title="Parar leitura"><i class="fa-solid fa-stop"></i></button>
+  </aside>
+
+  <!-- ========== HEADER ========== -->
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"><img src="images/pin.png" alt="Turistando CE"></div>
+        Turistando CE
+      </a>
+      
+      <div class="header-actions-group">
+        <div class="header-actions-icon">
+          <button class="btn-icon" id="btn-dark" title="Modo escuro" onclick="toggleDarkMode()">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <button class="acessibilidade-toggle" id="btn-acessibilidade" onclick="toggleAcessibilidade()"
+            aria-expanded="false" aria-label="Mostrar acessibilidade" title="Mostrar acessibilidade">
+            <i class="fa-solid fa-universal-access"></i>
+          </button>
+        </div>
+
+        <!-- Perfil do usuário -->
+        <div class="profile-menu" id="profile-menu">
+          <button class="profile-trigger" id="profile-trigger" aria-expanded="false" aria-label="Menu do usuário">
+            <div class="profile-avatar" id="profile-avatar">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <span class="profile-name" id="profile-name">Entrar</span>
+            <i class="fa-solid fa-chevron-down profile-arrow"></i>
+          </button>
+          <div class="profile-dropdown" id="profile-dropdown">
+            <!-- Conteúdo preenchido via JS -->
+          </div>
+        </div>
+      </div>
+      <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </header>
+  <div class="nav-overlay" id="nav-overlay" onclick="toggleMenu()"></div>
+  <div id="user-auth-mobile" class="hidden"></div>
+
+  <!-- ========== BANNER DA CIDADE ========== -->
+  <section class="cidade-hero fade-in">
+    <div class="cidade-hero-bg" id="cidade-hero-bg"></div>
+    <div class="cidade-hero-content container">
+      <h1 id="cidade-nome">Carregando...</h1>
+      <p id="cidade-descricao"></p>
+
+      <div class="cidade-stats">
+        <div class="stat-item">
+          <i class="fa-solid fa-bed"></i>
+          <span id="stat-hoteis">0</span> Hotéis
+        </div>
+        <div class="stat-item">
+          <i class="fa-solid fa-utensils"></i>
+          <span id="stat-restaurantes">0</span> Restaurantes
+        </div>
+        <div class="stat-item">
+          <i class="fa-solid fa-star"></i>
+          <span id="stat-avaliacoes">0</span> Avaliações
+        </div>
+        <div class="stat-item">
+          <i class="fa-solid fa-route"></i>
+          <span id="stat-experiencias">0</span> Experiências
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PESQUISA LOCAL (AVANÇADA) ========== -->
+  <div class="container">
+    <div class="advanced-search-box fade-in" style="margin-top: -60px; position: relative; z-index: 10;">
+      <!-- Input Principal -->
+      <div class="search-main-input">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="cidade-adv-text" placeholder="Pesquisar hotéis, restaurantes, experiências ou passeios nesta cidade..."
+          oninput="filtrarCidadeAvancada()">
+        <button onclick="filtrarCidadeAvancada()">Buscar</button>
+      </div>
+
+      <div class="filter-grid">
+        <!-- Filtro: Tipo -->
+        <div class="filter-group flex-1">
+          <span class="filter-label">Tipo</span>
+          <div class="filter-chips" id="cidade-adv-type">
+            <button class="filter-chip active" data-type="todos"
+              onclick="toggleCidadeAdvFilter(this, 'type')">Todos</button>
+            <button class="filter-chip" data-type="hoteis" onclick="toggleCidadeAdvFilter(this, 'type')">Hotéis</button>
+            <button class="filter-chip" data-type="restaurantes"
+              onclick="toggleCidadeAdvFilter(this, 'type')">Restaurantes</button>
+          </div>
+        </div>
+
+        <!-- Filtro: Tags -->
+        <div class="filter-group flex-1">
+          <span class="filter-label">Tags</span>
+          <div class="filter-chips" id="cidade-adv-tags">
+            <button class="filter-chip" data-tag="Luxo" onclick="toggleCidadeAdvFilter(this, 'tag')">Luxo</button>
+            <button class="filter-chip" data-tag="Pet Friendly" onclick="toggleCidadeAdvFilter(this, 'tag')">Pet
+              Friendly</button>
+            <button class="filter-chip" data-tag="Piscina" onclick="toggleCidadeAdvFilter(this, 'tag')">Piscina</button>
+            <button class="filter-chip" data-tag="Wi-Fi" onclick="toggleCidadeAdvFilter(this, 'tag')">Wi-Fi</button>
+            <button class="filter-chip" data-tag="Frutos do Mar"
+              onclick="toggleCidadeAdvFilter(this, 'tag')">Gastronomia</button>
+          </div>
+        </div>
+
+        <!-- Filtro: Preço e Ordenação -->
+        <div class="filter-group">
+          <span class="filter-label">Preço Máximo</span>
+          <div class="filter-slider-wrap">
+            <input type="range" class="filter-slider" id="cidade-adv-preco" min="0" max="2000" step="50" value="2000"
+              oninput="atualizarLabelPrecoCidade(this.value)" onchange="filtrarCidadeAvancada()">
+            <span class="slider-val" id="cidade-preco-label">Qualquer preço</span>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Ordenar</span>
+          <select class="filter-select" id="cidade-adv-ordem" onchange="filtrarCidadeAvancada()">
+            <option value="relevancia">Relevância</option>
+            <option value="preco-menor">Menor Preço</option>
+            <option value="preco-maior">Maior Preço</option>
+            <option value="avaliacao-melhor">Melhor Avaliação</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== HOTÉIS DA CIDADE ========== -->
+  <section class="section" id="hoteis">
+    <div class="container">
+      <div class="section-title fade-in">
+        <h2>Onde Ficar</h2>
+      </div>
+      <div class="grid grid-3" id="grid-hoteis">
+        <!-- Gerado via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== RESTAURANTES DA CIDADE ========== -->
+  <section class="section" id="restaurantes" style="background: var(--bg-alt);">
+    <div class="container">
+      <div class="section-title fade-in">
+        <h2>Onde Comer</h2>
+      </div>
+      <div class="grid grid-3" id="grid-restaurantes">
+        <!-- Gerado via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== EXPERIÊNCIAS DA CIDADE ========== -->
+  <section class="section" id="experiencias">
+    <div class="container">
+      <div class="section-title fade-in">
+        <h2>Experiências na cidade</h2>
+        <p>O que fazer além de dormir e comer: roteiros, passeios e atividades locais.</p>
+      </div>
+      <div class="grid grid-3" id="grid-experiencias-cidade">
+        <!-- Gerado via JS -->
+      </div>
+      <div style="text-align:center; margin-top:24px;">
+        <a href="experiencias.html" class="btn-plan" style="display:inline-flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver experiências do Ceará
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="empty-state" id="empty-state-cidade" style="display: none;">
+    <h3>Nenhum resultado encontrado.</h3>
+    <p>Tente utilizar outros termos de pesquisa.</p>
+  </div>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer" id="contato">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>🌿 Turistando CE</h3>
+          <p>A magia do Ceará em um só lugar.</p>
+        </div>
+        <div>
+          <h4>Links</h4>
+          <ul>
+            <li><a href="index.html">Página Inicial</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Turistando CE.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="btn-top" id="btn-top" onclick="window.scrollTo({top:0})" title="Voltar ao topo">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
+  <!-- ========== SCRIPTS ========== -->
+  <script src="data/cidades.js"></script>
+  <script src="data/hoteis.js"></script>
+  <script src="data/restaurantes.js"></script>
+  <script src="data/passeios.js"></script>
+  <script src="data/avaliacoes.js"></script>
+  <script src="data/galeria.js"></script>
+  <script src="js/experiencias.js"></script>
+  <script src="js/script.js"></script>
+</body>
+
+</html>

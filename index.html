@@ -1,0 +1,360 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turistando CE — Descubra o Ceará</title>
+  <meta name="description"
+    content="Turistando CE é a plataforma ideal para explorar os melhores destinos, Hotéis, restaurantes e passeios do Ceará.">
+
+  <!-- Fontes & Ícones -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+  <!-- ========== BARRA DE ACESSIBILIDADE ========== -->
+  <aside class="acessibilidade-bar hidden" aria-label="Acessibilidade" aria-hidden="true">
+    <button onclick="alterarFonte(1)" title="Aumentar fonte"><i class="fa-solid fa-plus"></i></button>
+    <button onclick="alterarFonte(-1)" title="Diminuir fonte"><i class="fa-solid fa-minus"></i></button>
+    <button onclick="lerPagina()" title="Leitura por voz"><i class="fa-solid fa-volume-high"></i></button>
+    <button onclick="pararLeitura()" title="Parar leitura"><i class="fa-solid fa-stop"></i></button>
+  </aside>
+
+  <!-- ========== HEADER ========== -->
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="#" class="logo">
+        <div class="logo-icon"><img src="images/pin.png" alt="Turistando CE"></div>
+        Turistando CE
+      </a>
+
+      <nav class="nav" id="nav">
+        <a href="#destinos">Destinos</a>
+        <a href="#hoteis">Hotéis</a>
+        <a href="#restaurantes">Restaurantes</a>
+        <a href="#passeios">Passeios</a>
+        <a href="experiencias.html">Experiências</a>
+        <a href="#galeria">Galeria</a>
+        <a href="#contato">Contato</a>
+      </nav>
+
+      <div class="header-actions-group">
+        <div class="header-actions-icon">
+          <button class="btn-icon" id="btn-dark" title="Modo escuro" onclick="toggleDarkMode()">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <button class="acessibilidade-toggle" id="btn-acessibilidade" onclick="toggleAcessibilidade()"
+            aria-expanded="false" aria-label="Mostrar acessibilidade" title="Mostrar acessibilidade">
+            <i class="fa-solid fa-universal-access"></i>
+          </button>
+        </div>
+
+        <!-- Perfil do usuário -->
+        <div class="profile-menu" id="profile-menu">
+          <button class="profile-trigger" id="profile-trigger" aria-expanded="false" aria-label="Menu do usuário">
+            <div class="profile-avatar" id="profile-avatar">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <span class="profile-name" id="profile-name">Entrar</span>
+            <i class="fa-solid fa-chevron-down profile-arrow"></i>
+          </button>
+          <div class="profile-dropdown" id="profile-dropdown">
+            <!-- Conteúdo preenchido via JS -->
+          </div>
+        </div>
+      </div>
+      <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </header>
+  <div class="nav-overlay" id="nav-overlay" onclick="toggleMenu()"></div>
+  <div id="user-auth-mobile" class="hidden"></div>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <h1>Descubra as belezas do <span>Ceará</span></h1>
+      <p>Praias paradisíacas, serras encantadoras e uma cultura vibrante esperam por você. Planeje sua viagem perfeita.
+      </p>
+
+      <!-- Barra de Pesquisa Global com Autocomplete -->
+      <div class="search-bar-global" id="search-bar">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="busca-global" placeholder="Para onde você quer ir? (cidade, hotel, restaurante...)"
+          autocomplete="off" oninput="realizarBuscaGlobal()" onfocus="mostrarAutocomplete()">
+        <button class="btn-search" onclick="realizarBuscaGlobal()">Buscar</button>
+        <!-- Autocomplete -->
+        <div class="search-autocomplete" id="search-autocomplete"></div>
+      </div>
+
+      <!-- Chips de Sugestão com Ícones -->
+      <div class="search-chips fade-in">
+        <button class="chip" onclick="preencherBusca('Fortaleza')">
+          <i class="fa-solid fa-city"></i> Fortaleza
+        </button>
+        <button class="chip" onclick="preencherBusca('Jericoacoara')">
+          <i class="fa-solid fa-umbrella-beach"></i> Jericoacoara
+        </button>
+        <button class="chip" onclick="preencherBusca('Praia')">
+          <i class="fa-solid fa-water"></i> Praias
+        </button>
+        <button class="chip" onclick="preencherBusca('Gastronomia')">
+          <i class="fa-solid fa-utensils"></i> Gastronomia
+        </button>
+        <button class="chip" onclick="preencherBusca('Aventura')">
+          <i class="fa-solid fa-mountain"></i> Aventura
+        </button>
+        <button class="chip" onclick="window.location.href='experiencias.html'">
+          <i class="fa-solid fa-route"></i> Experiências
+        </button>
+      </div>
+
+      <!-- Link Busca Avançada -->
+      <div style="margin-top: 16px;" class="fade-in">
+        <a href="pesquisa.html"
+          style="color: white; font-weight: 500; text-decoration: underline; font-size: 1.05rem; display: inline-flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-sliders"></i> Pesquisa Detalhada
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== RESULTADOS DA BUSCA (Oculto por Padrão) ========== -->
+  <section class="section" id="resultados-busca" style="min-height: 50vh; display: none;">
+    <div class="container" id="resultados-container">
+      <!-- Injetado via JS -->
+    </div>
+  </section>
+
+  <!-- ========== CONTEÚDO PRINCIPAL ========== -->
+  <div id="main-content">
+
+    <!-- ========== DESTINOS ========== -->
+    <section class="section" id="destinos">
+      <div class="container">
+        <div class="section-title fade-in">
+          <h2>Destinos Populares</h2>
+          <p>Conheça os lugares mais encantadores do Ceará, das praias às serras.</p>
+        </div>
+        <div class="section-search fade-in">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" placeholder="Buscar destinos..." oninput="filtrarSecao('destinos', this.value)">
+        </div>
+        <div class="grid grid-4" id="grid-destinos">
+          <!-- Gerado via JS -->
+        </div>
+        <button class="btn-ver-mais" data-secao="destinos" onclick="verMais('destinos')" style="display:none;">
+          <i class="fa-solid fa-chevron-down"></i> Ver mais destinos
+        </button>
+      </div>
+    </section>
+
+    <!-- ========== HOTÉIS ========== -->
+    <section class="section" id="hoteis" style="background: var(--bg-alt);">
+      <div class="container">
+        <div class="section-title fade-in">
+          <h2>Onde Ficar</h2>
+          <p>Os melhores hotéis e pousadas para sua estadia no Ceará.</p>
+        </div>
+
+        <div class="section-search fade-in">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" placeholder="Buscar hotéis..." oninput="filtrarSecao('hoteis', this.value)">
+        </div>
+        <div class="grid grid-3" id="grid-hoteis">
+          <!-- Gerado via JS -->
+        </div>
+        <button class="btn-ver-mais" data-secao="hoteis" onclick="verMais('hoteis')" style="display:none;">
+          <i class="fa-solid fa-chevron-down"></i> Ver mais hotéis
+        </button>
+      </div>
+    </section>
+
+    <!-- ========== RESTAURANTES ========== -->
+    <section class="section" id="restaurantes">
+      <div class="container">
+        <div class="section-title fade-in">
+          <h2>Onde Comer</h2>
+          <p>Sabores autênticos da gastronomia cearense que vão encantar seu paladar.</p>
+        </div>
+        <div class="section-search fade-in">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" placeholder="Buscar restaurantes..." oninput="filtrarSecao('restaurantes', this.value)">
+        </div>
+        <div class="grid grid-3" id="grid-restaurantes">
+          <!-- Gerado via JS -->
+        </div>
+        <button class="btn-ver-mais" data-secao="restaurantes" onclick="verMais('restaurantes')" style="display:none;">
+          <i class="fa-solid fa-chevron-down"></i> Ver mais restaurantes
+        </button>
+      </div>
+    </section>
+
+    <!-- ========== PASSEIOS ========== -->
+    <section class="section" id="passeios" style="background: var(--bg-alt);">
+      <div class="container">
+        <div class="section-title fade-in">
+          <h2>Passeios e Experiências</h2>
+          <p>Aventuras inesquecíveis para todos os gostos e estilos de viagem.</p>
+        </div>
+        <div class="section-search fade-in">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" placeholder="Buscar passeios..." oninput="filtrarSecao('passeios', this.value)">
+        </div>
+        <div class="grid grid-3" id="grid-passeios">
+          <!-- Gerado via JS -->
+        </div>
+        <button class="btn-ver-mais" data-secao="passeios" onclick="verMais('passeios')" style="display:none;">
+          <i class="fa-solid fa-chevron-down"></i> Ver mais passeios
+        </button>
+      </div>
+    </section>
+
+    <!-- ========== ROTEIRO INTELIGENTE ========== -->
+    <section class="section roteiro-section" id="roteiro">
+      <div class="container">
+        <div class="section-title fade-in">
+          <h2>Roteiro Inteligente</h2>
+          <p>Informe seus dias e orçamento e receba uma sugestão de roteiro personalizado.</p>
+        </div>
+
+        <div class="roteiro-form fade-in">
+          <input type="number" id="roteiro-dias" placeholder="Dias de viagem" min="1" max="7">
+          <input type="number" id="roteiro-orcamento" placeholder="Orçamento (R$)" min="100">
+          <button class="btn-roteiro" onclick="gerarRoteiro()">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> &nbsp;Gerar Roteiro
+          </button>
+        </div>
+
+        <div class="roteiro-resultado" id="roteiro-resultado"></div>
+      </div>
+    </section>
+
+    <!-- ========== MAPA ========== -->
+    <section class="section" id="mapa">
+      <div class="container">
+        <div class="section-title fade-in">
+          <h2>Explore o Mapa</h2>
+          <p>Visualize as principais regiões turísticas do Ceará.</p>
+        </div>
+        <div class="mapa-container fade-in" style="padding: 36px 28px; text-align: center;">
+          <div
+            style="width: 68px; height: 68px; margin: 0 auto 18px; border-radius: 22px; background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.6rem;">
+            <i class="fa-solid fa-map-location-dot"></i>
+          </div>
+          <h3 style="font-size: 1.45rem; color: var(--text); margin-bottom: 10px;">Mapa interativo do Ceará</h3>
+          <p style="color: var(--text-secondary); max-width: 640px; margin: 0 auto 18px;">
+            Abra a versão completa com markers, filtros por categoria e sincronização com a lista lateral.
+          </p>
+          <a href="mapa.html" class="btn-plan" style="display: inline-flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            Abrir mapa interativo
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== EXPERIÊNCIAS ========== -->
+    <section class="section" id="experiencias">
+      <div class="container">
+        <div class="section-title fade-in">
+          <h2>Experiências em destaque</h2>
+          <p>Atividades completas com roteiro, empresa, duração e preço para decidir mais rápido.</p>
+        </div>
+        <div class="grid grid-3" id="grid-experiencias-home">
+          <!-- Gerado via js/experiencias.js -->
+        </div>
+        <div style="text-align:center; margin-top:24px;">
+          <a href="experiencias.html" class="btn-plan" style="display:inline-flex; align-items:center; gap:8px;">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver todas as experiências
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== GALERIA ========== -->
+    <section class="section" id="galeria">
+      <div class="container">
+        <div class="section-title fade-in">
+          <h2>Galeria de Fotos</h2>
+          <p>Imagens que capturam a essência e a beleza do Ceará.</p>
+        </div>
+        <div class="galeria-grid fade-in" id="grid-galeria">
+          <!-- Gerado via JS -->
+        </div>
+      </div>
+    </section>
+  </div> <!-- Fim do main-content -->
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer" id="contato">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>🌿 Turistando CE</h3>
+          <p>Plataforma dedicada a conectar viajantes com os melhores destinos do Ceará. Descubra praias, serras,
+            cultura e gastronomia em um só lugar.</p>
+          <div class="footer-social">
+            <a href="#" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          </div>
+        </div>
+        <div>
+          <h4>Explorar</h4>
+          <ul>
+            <li><a href="#destinos">Destinos</a></li>
+            <li><a href="#hoteis">Hotéis</a></li>
+            <li><a href="#restaurantes">Restaurantes</a></li>
+            <li><a href="#passeios">Passeios</a></li>
+            <li><a href="experiencias.html">Experiências</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Suporte</h4>
+          <ul>
+            <li><a href="cadastro.html">Criar Conta</a></li>
+            <li><a href="cadastro.html">Anunciar Empresa</a></li>
+            <li><a href="#">Central de Ajuda</a></li>
+            <li><a href="#">Política de Privacidade</a></li>
+            <li><a href="#">Termos de Uso</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contato</h4>
+          <ul>
+            <li><a href="mailto:contato@turistandoce.com">contato@turistandoce.com</a></li>
+            <li><a href="tel:+5585999999999">(85) 99999-9999</a></li>
+            <li><a href="#">Fortaleza, CE — Brasil</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Turistando CE — Projeto Escolar. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== BOTÃO VOLTAR AO TOPO ========== -->
+  <button class="btn-top" id="btn-top" onclick="window.scrollTo({top:0})" title="Voltar ao topo">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
+  <!-- ========== SCRIPTS ========== -->
+  <script src="data/cidades.js"></script>
+  <script src="data/hoteis.js"></script>
+  <script src="data/restaurantes.js"></script>
+  <script src="data/passeios.js"></script>
+  <script src="data/avaliacoes.js"></script>
+  <script src="data/galeria.js"></script>
+  <script src="js/experiencias.js"></script>
+  <script src="js/script.js"></script>
+</body>
+
+</html>

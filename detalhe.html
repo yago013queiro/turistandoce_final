@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhe — Turistando CE</title>
+  <meta name="description"
+    content="Veja detalhes de hotéis e restaurantes do Ceará com ações rápidas, comodidades e recomendações da mesma cidade.">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+
+<body>
+  <!-- ========== BARRA DE ACESSIBILIDADE ========== -->
+  <aside class="acessibilidade-bar hidden" aria-label="Acessibilidade" aria-hidden="true">
+    <button onclick="alterarFonte(1)" title="Aumentar fonte"><i class="fa-solid fa-plus"></i></button>
+    <button onclick="alterarFonte(-1)" title="Diminuir fonte"><i class="fa-solid fa-minus"></i></button>
+    <button onclick="lerPagina()" title="Leitura por voz"><i class="fa-solid fa-volume-high"></i></button>
+    <button onclick="pararLeitura()" title="Parar leitura"><i class="fa-solid fa-stop"></i></button>
+  </aside>
+
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"><img src="images/pin.png" alt="Turistando CE"></div>
+        Turistando CE
+      </a>
+      
+      <div class="header-actions-group">
+        <div class="header-actions-icon">
+          <button class="btn-icon" id="btn-dark" title="Modo escuro" onclick="toggleDarkMode()">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <button class="acessibilidade-toggle" id="btn-acessibilidade" onclick="toggleAcessibilidade()"
+            aria-expanded="false" aria-label="Mostrar acessibilidade" title="Mostrar acessibilidade">
+            <i class="fa-solid fa-universal-access"></i>
+          </button>
+        </div>
+
+        <!-- Perfil do usuário -->
+        <div class="profile-menu" id="profile-menu">
+          <button class="profile-trigger" id="profile-trigger" aria-expanded="false" aria-label="Menu do usuário">
+            <div class="profile-avatar" id="profile-avatar">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <span class="profile-name" id="profile-name">Entrar</span>
+            <i class="fa-solid fa-chevron-down profile-arrow"></i>
+          </button>
+          <div class="profile-dropdown" id="profile-dropdown">
+            <!-- Conteúdo preenchido via JS -->
+          </div>
+        </div>
+      </div>
+      <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </header>
+  <div class="nav-overlay" id="nav-overlay" onclick="toggleMenu()"></div>
+  <div id="user-auth-mobile" class="hidden"></div>
+
+  <main class="detail-page">
+    <section class="container">
+      <div class="detail-hero fade-in">
+        <div class="detail-hero__media">
+          <span class="detail-hero__badge" id="detail-badge">Carregando</span>
+          <img id="detail-image" src="" alt="">
+        </div>
+
+        <div class="detail-hero__panel">
+          <div class="detail-breadcrumb" id="detail-breadcrumb"></div>
+          <h1 class="detail-title" id="detail-title">Carregando...</h1>
+          <p class="detail-subtitle" id="detail-subtitle"></p>
+
+          <div class="detail-facts" id="detail-facts"></div>
+
+          <div class="detail-actions">
+            <button class="btn-plan" id="detail-fav-btn" type="button">
+              <i class="fa-solid fa-heart"></i>
+              Favoritar
+            </button>
+            <button class="btn-secondary" id="detail-know-btn" type="button">
+              <i class="fa-solid fa-star"></i>
+              Quero conhecer
+            </button>
+            <button class="btn-secondary" id="detail-visited-btn" type="button">
+              <i class="fa-solid fa-circle-check"></i>
+              Marcar como visitado
+            </button>
+            <button class="btn-secondary" id="detail-share-btn" type="button">
+              <i class="fa-solid fa-share-nodes"></i>
+              Compartilhar
+            </button>
+            <a class="btn-secondary" id="detail-map-btn" href="#">
+              <i class="fa-solid fa-map-location-dot"></i>
+              Ver no mapa
+            </a>
+          </div>
+
+          <div class="detail-social" id="detail-social"></div>
+        </div>
+      </div>
+
+      <section class="detail-section fade-in">
+        <h2>Sobre</h2>
+        <div class="detail-grid">
+          <div class="detail-copy">
+            <p id="detail-about"></p>
+          </div>
+          <div>
+            <h2 class="detail-section-subtitle">Comodidades</h2>
+            <div class="tag-list" id="detail-tags"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="detail-section fade-in hidden" id="detail-roteiro-section">
+        <h2>Roteiro da Experiência</h2>
+        <div class="detail-timeline" id="detail-roteiro"></div>
+      </section>
+
+      <section class="detail-section fade-in hidden" id="detail-empresas-section">
+        <h2>Empresas que Oferecem</h2>
+        <div class="detail-empresas-grid" id="detail-empresas"></div>
+      </section>
+
+      <section class="detail-section fade-in hidden" id="detail-dicas-section">
+        <h2>Dicas Úteis</h2>
+        <div class="tag-list" id="detail-dicas"></div>
+      </section>
+
+      <section class="detail-section fade-in hidden" id="detail-mapa-section">
+        <h2>Mapa e Localização</h2>
+        <div class="detail-location-card" id="detail-mapa-info"></div>
+        <div class="detail-mapa-container" id="detail-mapa-container"></div>
+      </section>
+
+      <!-- Galeria de Fotos -->
+      <section class="detail-section fade-in hidden" id="detail-galeria-section">
+        <h2>📸 Galeria de Fotos</h2>
+        <div class="detail-galeria-grid" id="detail-galeria"></div>
+      </section>
+
+      <!-- Cardápio -->
+      <section class="detail-section fade-in hidden" id="detail-cardapio-section">
+        <h2>📋 Cardápio</h2>
+        <div class="detail-cardapio-grid" id="detail-cardapio"></div>
+      </section>
+      <section class="detail-section recommendations fade-in">
+        <h2 id="detail-rec-title">Recomendações</h2>
+        <div class="recommendations-grid" id="detail-recommendations"></div>
+      </section>
+
+      <!-- ========== COMENTÁRIOS DOS USUÁRIOS ========== -->
+      <section class="detail-section fade-in" id="detail-comentarios">
+        <h2>💬 Comentários (<span id="comentarios-count">0</span>)</h2>
+
+        <!-- Formulário de novo comentário (preenchido via JS) -->
+        <div id="comentarios-form-container"></div>
+
+        <!-- Lista de comentários -->
+        <div id="comentarios-lista" class="comentarios-lista">
+          <div class="comentario-vazio" id="comentarios-vazio">
+            <i class="fa-regular fa-comment-dots"></i>
+            <p>Nenhum comentário ainda. Seja o primeiro a comentar!</p>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="data/cidades.js"></script>
+  <script src="data/hoteis.js"></script>
+  <script src="data/restaurantes.js"></script>
+  <script src="data/passeios.js"></script>
+  <script src="data/mapa-pontos.js"></script>
+  <script src="js/experiencias.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/detalhe.js"></script>
+</body>
+
+</html>
