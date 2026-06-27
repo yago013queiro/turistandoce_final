@@ -153,7 +153,7 @@
         }
       ],
       banner: 'https://www.fortaleza.ce.gov.br/images/images2/AMC/estao_jangurussu.jpeg',
-      imagem: 'https://images.unsplash.com/photo-1483721310020-03333e577078?w=1200&h=800&fit=crop',
+      imagem: 'https://www.fortaleza.ce.gov.br/images/images2/AMC/estao_jangurussu.jpeg',
       localizacao: {
         cidade: 'Fortaleza',
         pontoPartida: 'Avenida Beira Mar',
@@ -208,10 +208,10 @@
           nota: 4.9
         }
       ],
-      banner: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&h=800&fit=crop',
+      banner: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/b4/27/c0/parque-das-cachoeiras.jpg?w=1200&h=-1&s=1',
       imagens: [
       ],
-      imagem: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&h=800&fit=crop',
+      imagem: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/b4/27/c0/parque-das-cachoeiras.jpg?w=1200&h=-1&s=1',
       localizacao: {
         cidade: 'Guaramiranga',
         pontoPartida: 'Centro',

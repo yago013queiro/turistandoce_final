@@ -194,47 +194,6 @@
         </button>
       </div>
     </section>
-
-    <!-- ========== PASSEIOS ========== -->
-    <section class="section" id="passeios" style="background: var(--bg-alt);">
-      <div class="container">
-        <div class="section-title fade-in">
-          <h2>Passeios e Experiências</h2>
-          <p>Aventuras inesquecíveis para todos os gostos e estilos de viagem.</p>
-        </div>
-        <div class="section-search fade-in">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" placeholder="Buscar passeios..." oninput="filtrarSecao('passeios', this.value)">
-        </div>
-        <div class="grid grid-3" id="grid-passeios">
-          <!-- Gerado via JS -->
-        </div>
-        <button class="btn-ver-mais" data-secao="passeios" onclick="verMais('passeios')" style="display:none;">
-          <i class="fa-solid fa-chevron-down"></i> Ver mais passeios
-        </button>
-      </div>
-    </section>
-
-    <!-- ========== ROTEIRO INTELIGENTE ========== -->
-    <section class="section roteiro-section" id="roteiro">
-      <div class="container">
-        <div class="section-title fade-in">
-          <h2>Roteiro Inteligente</h2>
-          <p>Informe seus dias e orçamento e receba uma sugestão de roteiro personalizado.</p>
-        </div>
-
-        <div class="roteiro-form fade-in">
-          <input type="number" id="roteiro-dias" placeholder="Dias de viagem" min="1" max="7">
-          <input type="number" id="roteiro-orcamento" placeholder="Orçamento (R$)" min="100">
-          <button class="btn-roteiro" onclick="gerarRoteiro()">
-            <i class="fa-solid fa-wand-magic-sparkles"></i> &nbsp;Gerar Roteiro
-          </button>
-        </div>
-
-        <div class="roteiro-resultado" id="roteiro-resultado"></div>
-      </div>
-    </section>
-
     <!-- ========== MAPA ========== -->
     <section class="section" id="mapa">
       <div class="container">
